@@ -14,9 +14,7 @@
   }
 
   const onDelete = (index) => {
-    themes.forEach((theme) => {
-      theme.colors = theme.colors.filter((color, i) => i !== index)
-    })
+    themes.forEach((theme) => theme.colors.splice(index, 1))
 
     themesStore.set(themes)
   }
@@ -47,7 +45,7 @@
     <div style="display: flex;">
       <input
         type="text"
-        id="color"
+        id={`color-${i}`}
         disabled={selectedIndex !== 0}
         value={color.name}
         on:keyup={(event) => onChangeName(event, i)}
@@ -55,7 +53,7 @@
 
       <ColorPicker on:onColorChange={(event) => onColorChange(event, i)} bind:color={color.value} />
 
-      {color.value}
+      <label for={`color-${i}`}>{color.value}</label>
 
       <button on:click={() => onDelete(i)}>delete</button>
     </div>

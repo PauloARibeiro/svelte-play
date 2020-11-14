@@ -5,8 +5,14 @@
 </script>
 
 <style>
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+  }
 </style>
 
-<Colors />
-<Themes />
-<Code />
+<div class="container">
+  <Themes />
+  <Colors />
+  <Code />
+</div>
