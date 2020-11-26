@@ -161,6 +161,10 @@ h5 {
 }
 /*#endregion*/
 
+.w-100 {
+  width: 100%;
+}
+
 .pointer {
   cursor: pointer;
   touch-action: manipulation;
@@ -175,6 +179,10 @@ h5 {
   display: flex;
 }
 
+.fx-align-center {
+  align-items: center;
+}
+
 .fx-direction-column {
   flex-direction: column;
 }
@@ -182,3 +190,7 @@ h5 {
 .fx-content-space-between {
   justify-content: space-between;
 }
+
+/* path {
+  transition: 1s ease all;
+} */

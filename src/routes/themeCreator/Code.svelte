@@ -11,7 +11,8 @@
     background: #1e1e1e;
     color: #b4b8b3;
     padding: 1.6rem;
-    /* height: 800px; */
+    height: 768px;
+    overflow: auto;
   }
 
   .code-css__head,

@@ -8,7 +8,7 @@ export const themesStore = writable([
     edit: false,
     colors: [
       {
-        value: '#ffffff',
+        value: '#fff',
         name: 'white',
       },
     ],

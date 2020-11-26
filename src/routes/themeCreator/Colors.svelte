@@ -1,5 +1,6 @@
 <script>
   import ColorPicker from '../../components/ColorPicker.svelte'
+  import Button from '../../components/Button.svelte'
   import preventWhiteSpace from '../../utils/preventWhiteSpace'
   import { themesStore, selectedIndexStore } from './store'
 
@@ -41,23 +42,24 @@
 </style>
 
 <div>
+  <Button on:click={onAddColor}>Add</Button>
+
   {#each themes[selectedIndex].colors as color, i}
     <div style="display: flex;">
-      <input
-        type="text"
-        id={`color-${i}`}
-        disabled={selectedIndex !== 0}
-        value={color.name}
-        on:keyup={(event) => onChangeName(event, i)}
-        on:keypress={preventWhiteSpace} />
+      <div class="fx fx-direction-column pointer">
+        <label for={`color-${i}`}>{color.value}</label>
+        <input
+          type="text"
+          id={`color-${i}`}
+          disabled={selectedIndex !== 0}
+          value={color.name}
+          on:keyup={(event) => onChangeName(event, i)}
+          on:keypress={preventWhiteSpace} />
+      </div>
 
       <ColorPicker on:onColorChange={(event) => onColorChange(event, i)} bind:color={color.value} />
 
-      <label for={`color-${i}`}>{color.value}</label>
-
-      <button on:click={() => onDelete(i)}>delete</button>
+      <button on:click={() => onDelete(i)}>d</button>
     </div>
   {/each}
-
-  <button on:click={onAddColor}>Add</button>
 </div>
