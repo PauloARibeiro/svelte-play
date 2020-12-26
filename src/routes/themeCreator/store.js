@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store'
 
+export const shouldAnimateStore = writable(false)
 export const selectedIndexStore = writable(0)
 export const themesStore = writable([
   {
@@ -8,7 +9,7 @@ export const themesStore = writable([
     edit: false,
     colors: [
       {
-        value: '#fff',
+        value: '#000',
         name: 'white',
       },
     ],

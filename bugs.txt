@@ -1,0 +1,5 @@
+Delete all colors of a theme has a weird bug with other themes
+After deleting all themes can't create new one - fixed
+disable create new color button if not themes
+after creating select that one - fixed
+clicking on color text opens all colors

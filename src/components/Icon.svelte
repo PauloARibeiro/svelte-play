@@ -7,16 +7,27 @@
   export let name = ''
   export let width = '100%;'
   export let height = '100%'
-  export let color = 'grayscale-300'
-  export let hoverColor = 'grayscale-600'
+  export let color = 'grey'
+  export let hoverColor = 'red'
+  let tempColor = 'grey'
+
+  tempColor = color
+
+  const onMouseover = () => {
+    color = hoverColor
+  }
+
+  const onMouseleave = () => {
+    color = tempColor
+  }
 </script>
 
 <style>
   .icon {
-    transition: 0.13s ease-in-out all;
+    transition: 0.13s ease-in-out fill;
   }
 
-  .black {
+  /* .black {
     fill: var(--c-black);
   }
   .white {
@@ -81,14 +92,16 @@
   }
   .hover-grayscale-800:hover .icon {
     fill: var(--c-grayscale-800);
-  }
+  } */
 </style>
 
 <div
   style="width: 100%; height: 100%"
-  class={`hover-${hoverColor} fx fx-align-center`}
-  on:click={(e) => dispatch('click', e)}>
-  <div style={`width: ${width}; height:${height}`} class={`icon ${color}`}>
+  class="fx fx-center"
+  on:click={(e) => dispatch('click', e)}
+  on:mouseover={onMouseover}
+  on:mouseout={onMouseleave}>
+  <div style={`width: ${width}; height:${height}; fill:${color}`} class={`icon ${color}`}>
     {@html Icons[name]}
   </div>
 </div>

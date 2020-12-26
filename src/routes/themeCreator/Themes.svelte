@@ -1,33 +1,55 @@
 <script>
+  // LIBRARIES
+  import SimpleBar from '@woden/svelte-simplebar'
+
+  // ANIMATIONS
   import { fly, fade } from 'svelte/transition'
   import { flip } from 'svelte/animate'
+
+  // UTILS
   import preventWhiteSpace from '../../utils/preventWhiteSpace'
-  import { themesStore, selectedIndexStore } from './store'
+  import { ripple } from '../../utils/ripple'
+
+  // STORE
+  import { themesStore, selectedIndexStore, shouldAnimateStore } from './store'
+
+  // COMPONENTS
   import Icon from '../../components/Icon.svelte'
-  import Button from '../../components/Button.svelte'
+  import Header from './Header.svelte'
 
   let themes = []
   let selectedIndex = 0
-
+  let editNameTemp = ''
   let inputEl
+  let isDelete = false
 
-  let iconColor = 'c-grayscale-300'
-
-  selectedIndexStore.subscribe((store) => (selectedIndex = store))
-  themesStore.subscribe((store) => (themes = store))
+  const iconsColor = {
+    base: '#0000008A',
+    edit: '#2D9CDB',
+    delete: '#EB5757',
+    confirm: '#57EB66',
+  }
 
   const onToggle = (index) => {
-    themes.forEach((theme) => (theme.edit = false))
+    isDelete = false
 
-    selectedIndexStore.set(index)
+    shouldAnimateStore.set(false)
 
-    themesStore.set(themes)
+    setTimeout(() => {
+      themes.forEach((theme) => (theme.edit = false))
+
+      selectedIndexStore.set(index)
+
+      themesStore.set(themes)
+    }, 0)
   }
 
   const onToggleToEdit = (index) => {
     themes[selectedIndex].edit = false
 
     themes[index].edit = !themes[index].edit
+
+    editNameTemp = themes[index].name
 
     themesStore.set(themes)
 
@@ -38,163 +60,334 @@
     }, 0)
   }
 
-  const onEditName = (event, index) => {
-    themes[index].name = event.target.value
+  const onConfirm = (index) => {
+    themes[index].name = editNameTemp
+    themes[index].edit = false
 
     themesStore.set(themes)
+  }
+
+  const onCancel = (index) => {
+    themes[index].edit = false
+  }
+
+  const onEditName = (event) => {
+    editNameTemp = event.target.value
   }
 
   const onNewTheme = () => {
-    const colors = []
+    const index = themes.length === 0 ? 0 : themes.length
 
-    themes[0].colors.map((item) => colors.push({ ...item }))
-
-    const newTheme = {
-      id: themes.length - 1,
-      name: 'theme',
-      edit: false,
-      colors,
+    console.log(themes.length)
+    if (themes.length === 0) {
     }
 
-    themesStore.set([...themes, ...[newTheme]])
+    const newTheme = {
+      id: index,
+      name: 'new theme',
+      edit: false,
+      colors: [
+        {
+          value: '#000',
+          name: 'white',
+        },
+      ],
+    }
+
+    shouldAnimateStore.set(false)
+
+    setTimeout(() => {
+      selectedIndexStore.set(index)
+
+      themesStore.set([...themes, ...[newTheme]])
+    }, 0)
   }
 
-  const onDelete = (index) => {
-    if (selectedIndex === themes.length - 1) selectedIndexStore.set(index - 1)
+  const onToggleDelete = (index, state) => {
+    shouldAnimateStore.set(false)
 
-    themes.splice(index, 1)
+    setTimeout(() => {
+      selectedIndexStore.set(index)
 
-    themesStore.set(themes)
+      isDelete = state
+    }, 0)
   }
+
+  const onConfirmDelete = (index) => {
+    isDelete = false
+
+    setTimeout(() => {
+      if (selectedIndex === themes.length - 1) selectedIndexStore.set(index - 1)
+
+      themes.splice(index, 1)
+
+      themesStore.set(themes)
+    }, 100)
+  }
+
+  // const itemDeleteSlide = (node, { transition }) => {
+  //   if (!transition) return
+
+  //   return {
+  //     duration: 1000,
+  //     ease: 'ease',
+  //     css: (t) => {
+  //       if (1 - t === 0) {
+  //         node.style.right = `-${(1 - t) * 96}px`
+  //       }
+
+  //       return `
+  //       right: -${(1 - t) * 96}px
+  // 			`
+  //     },
+  //   }
+  // }
+
+  selectedIndexStore.subscribe((store) => (selectedIndex = store))
+  themesStore.subscribe((store) => (themes = store))
 </script>
 
 <style>
-  :focus {
-    /* outline: 1px solid red; */
+  .themes-wrapper {
+    height: 100%;
+    max-height: 100vh;
+    background-color: #fff;
   }
 
-  .themes {
-    border-right: 1px solid var(--c-grayscale-300);
-  }
+  /* .themes {
+    overflow: auto;
+    height: 100%;
+    max-height: calc(100vh - 12%);
+  } */
 
-  .theme {
-    background: var(--white);
+  li {
     position: relative;
     overflow: hidden;
-    border-bottom: 1px solid var(--c-grayscale-300);
-    transition: 0.1s ease-in-out all;
+  }
+
+  /********** item **********/
+  .theme {
+    position: relative;
+    overflow: hidden;
+    height: 9rem;
+    background: #fff;
+    transform: translate(0);
+    transition: all 0.23s ease-in-out;
+  }
+
+  .theme.delete {
+    transform: translate(-9.6rem);
   }
 
   .theme::before {
-    content: '';
     position: absolute;
-    width: 3px;
-    height: 99%;
-    background: var(--c-brand);
-    top: 0;
-    left: 0;
-    transform: translateX(-3px);
-    transition: 0.1s ease-in-out transform;
+    content: '';
+    left: 1.2rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    background: #2d9ddb;
+    width: 0.6rem;
+    height: 0;
+    border-radius: 0.3rem;
+    opacity: 0;
+    transition: all 0.13s ease-in;
   }
 
-  .theme:active::before {
-    width: 4px;
-    transform: translateX(0px);
-  }
-
-  .theme.active::before {
-    transform: translateX(0);
+  .theme::after {
+    position: absolute;
+    content: '';
+    width: calc(100% - 6rem);
+    height: 0.1rem;
+    background-color: #828282;
+    bottom: 0;
+    left: 3rem;
   }
 
   .theme.active {
-    background: var(--c-grayscale-300);
+    background: #f2f2f2;
   }
 
-  .theme.active .name-label,
-  .theme:hover .name-label {
-    color: var(--c-black);
+  .theme.active::before {
+    opacity: 1;
+    height: 6.6rem;
   }
 
-  .name-label,
-  .name-input {
-    padding: var(--space-s);
+  /* .theme:active {
+    background: #f2f2f266;
+  } */
+
+  .theme:hover::before {
+    opacity: 1;
   }
 
-  .name-label {
-    color: var(--c-grayscale-800);
-    transition: 0.1s ease-in-out all;
-  }
+  /********** label and input **********/
+  /* .name {
+    transition: 0.13s ease-in-out all;
+  } */
 
-  .name-input {
-    border: none;
-    background: var(--c-grayscale-300);
-    /* border-bottom: 1px solid var(--c-grayscale-800); */
-  }
-
-  .name-input:focus {
-    outline: none;
-  }
-
-  .action {
-    border: none;
+  .name,
+  .label {
     height: 100%;
-    padding-right: var(--space-xs);
-    background: transparent;
+  }
+
+  .label,
+  .input {
+    padding-left: 3rem;
+    font-size: 2rem;
+    color: #4f4f4f;
+  }
+
+  .input {
+    outline: none;
+    border: none;
+    background-color: #f2f2f2;
+  }
+
+  /********** actions **********/
+  .actions {
+    position: absolute;
+    right: 0;
+    padding-right: 3rem;
+    gap: 1.6rem;
+  }
+
+  .actions {
+    height: 100%;
+  }
+
+  /* .action:first-child {
+    margin-right: 1.6rem;
+  } */
+
+  /********** delete **********/
+  .delete-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 9.6rem;
+    right: -9.6rem;
+    transition: all 0.23s ease-in-out;
+  }
+
+  .delete-actions.delete {
+    right: 0;
+  }
+
+  .delete-action {
+    height: 100%;
+    flex: 1 1 50%;
+  }
+
+  .delete-action.confirm {
+    background: #57eb66;
+  }
+
+  .delete-action.discard {
+    background: #eb5757;
   }
 </style>
 
-<ul class="themes fx fx-direction-column">
-  <Button on:click={() => onNewTheme()}>new theme</Button>
+<div class="themes-wrapper fx fx-direction-column">
+  <Header title="Themes" description="Start by creating a theme" on:onClick={() => onNewTheme()} />
 
-  {#each themes as theme, i (theme)}
-    <li
-      animate:flip={{ delay: 300, duration: 200 }}
-      in:fade={{ duration: 100 }}
-      out:fly={{ x: 150, duration: 300 }}
-      class="theme fx fx-content-space-between pointer"
-      class:active={selectedIndex === i}>
-      <div class="name fx w-100">
-        {#if !theme.edit}
-          <label
-            class="name-label w-100 pointer"
-            for={`theme-${i}`}
-            on:click={() => onToggle(i)}>{theme.name}</label>
-        {:else}
-          <input
-            type="text"
-            id={`theme-${i}`}
-            class="name-input w-100"
-            disabled={i === 0}
-            value={theme.name}
-            on:keyup={(event) => onEditName(event, i)}
-            on:keypress={preventWhiteSpace}
-            bind:this={inputEl} />
-        {/if}
-      </div>
-
-      {#if i !== 0}
-        <div class="actions fx fx-align-center ">
-          <div class="action">
-            <Icon
-              class="action pointer"
-              name="edit"
-              width="20px"
-              height="20px"
-              color={selectedIndex === i ? 'grayscale-800' : 'grayscale-300'}
-              on:click={() => onToggleToEdit(i)} />
+  <!-- <SimpleBar style="height: calc(100vh - 12%);"> -->
+  <ul class="themes">
+    {#each themes as theme, i (theme)}
+      <li
+        animate:flip={{ delay: 400, duration: 200 }}
+        in:fade={{ duration: 130 }}
+        out:fly={{ x: 150, duration: 600 }}>
+        <div
+          class="theme fx fx-content-space-between fx-center pointer"
+          class:active={selectedIndex === i}
+          class:delete={isDelete && selectedIndex === i}>
+          <div class="name fx w-100">
+            {#if !theme.edit}
+              <label
+                class="label fx fx-align-center w-100 pointer"
+                for={`theme-${i}`}
+                on:click={() => onToggle(i)}>{theme.name}
+              </label>
+            {:else}
+              <input
+                type="text"
+                autocomplete="off"
+                id={`theme-${i}`}
+                class="input w-100"
+                disabled={i === 0}
+                value={theme.name}
+                on:keyup={onEditName}
+                on:keypress={preventWhiteSpace}
+                bind:this={inputEl} />
+            {/if}
           </div>
 
-          <div class="action pointer">
+          {#if !theme.edit}
+            <div class="actions fx fx-align-center" transition:fade={{ duration: 130 }}>
+              <Icon
+                name="edit"
+                width="2.4rem"
+                height="2.4rem"
+                color={iconsColor.base}
+                hoverColor={iconsColor.edit}
+                on:click={() => onToggleToEdit(i)} />
+
+              <Icon
+                name="delete"
+                width="2.4rem"
+                height="2.4rem"
+                color={iconsColor.base}
+                hoverColor={iconsColor.delete}
+                on:click={() => onToggleDelete(i, true)} />
+            </div>
+          {:else}
+            <div class="actions fx fx-align-center" transition:fade={{ duration: 130 }}>
+              <Icon
+                name="check"
+                width="2.4rem"
+                height="2.4rem"
+                color={iconsColor.base}
+                hoverColor={iconsColor.confirm}
+                on:click={() => onConfirm(i)} />
+
+              <Icon
+                name="close"
+                width="2.4rem"
+                height="2.4rem"
+                color={iconsColor.base}
+                hoverColor={iconsColor.delete}
+                on:click={() => onCancel(i)} />
+            </div>
+          {/if}
+        </div>
+        <!-- {#if isDelete && selectedIndex === i} -->
+        <div
+          class="delete-actions delete-transion  fx pointer"
+          class:delete={isDelete && selectedIndex === i}>
+          <div class="delete-action confirm fx fx-center">
             <Icon
-              name="delete"
-              width="20px"
-              height="20px"
-              color={selectedIndex === i ? 'grayscale-800' : 'grayscale-300'}
-              hoverColor="error"
-              on:click={() => onDelete(i)} />
+              name="check"
+              width="2.4rem"
+              height="2.4rem"
+              color="white"
+              hoverColor="white"
+              on:click={() => onConfirmDelete(i)} />
+          </div>
+
+          <div class="delete-action discard fx fx-center">
+            <Icon
+              name="close"
+              width="2.4rem"
+              height="2.4rem"
+              color="white"
+              hoverColor="white"
+              on:click={() => onToggleDelete(i, false)} />
           </div>
         </div>
-      {/if}
-    </li>
-  {/each}
-</ul>
+        <!-- {/if} -->
+      </li>
+    {/each}
+  </ul>
+  <!-- </SimpleBar> -->
+</div>

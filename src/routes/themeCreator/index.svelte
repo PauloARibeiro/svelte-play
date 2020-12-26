@@ -7,7 +7,10 @@
 <style>
   .container {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 100%;
+    max-height: 100vh;
+    overflow: hidden;
   }
 </style>
 

@@ -1,0 +1,131 @@
+:root {
+  /*#region COLORS*/
+  /* --primary-100: #d6eeff;
+  --primary-200: #addbff;
+  --primary-300: #84c4ff;
+  --primary-400: #66aeff;
+  --primary-500: #338bff;
+  --primary-600: #256bdb;
+  --primary-700: #1950b7;
+  --primary-800: #103793;
+  --primary-900: #09267a;
+  --primary-transparent-100: rgba(51, 139, 255, 0.08);
+  --primary-transparent-200: rgba(51, 139, 255, 0.16);
+  --primary-transparent-300: rgba(51, 139, 255, 0.24);
+  --primary-transparent-400: rgba(51, 139, 255, 0.32);
+  --primary-transparent-500: rgba(51, 139, 255, 0.4);
+  --primary-transparent-600: rgba(51, 139, 255, 0.48);
+  --success-100: #edfdd5;
+  --success-200: #d7fbac;
+  --success-300: #b8f581;
+  --success-400: #9aec60;
+  --success-500: #6de02f;
+  --success-600: #4fc022;
+  --success-700: #36a117;
+  --success-800: #21810e;
+  --success-900: #126b09;
+  --success-transparent-100: rgba(109, 224, 47, 0.08);
+  --success-transparent-200: rgba(109, 224, 47, 0.16);
+  --success-transparent-300: rgba(109, 224, 47, 0.24);
+  --success-transparent-400: rgba(109, 224, 47, 0.32);
+  --success-transparent-500: rgba(109, 224, 47, 0.4);
+  --success-transparent-600: rgba(109, 224, 47, 0.48);
+  --info-100: #d9fffe;
+  --info-200: #b3faff;
+  --info-300: #8df0ff;
+  --info-400: #71e2ff;
+  --info-500: #42ccff;
+  --info-600: #30a1db;
+  --info-700: #217ab7;
+  --info-800: #155793;
+  --info-900: #0c3e7a;
+  --info-transparent-100: rgba(66, 204, 255, 0.08);
+  --info-transparent-200: rgba(66, 204, 255, 0.16);
+  --info-transparent-300: rgba(66, 204, 255, 0.24);
+  --info-transparent-400: rgba(66, 204, 255, 0.32);
+  --info-transparent-500: rgba(66, 204, 255, 0.4);
+  --info-transparent-600: rgba(66, 204, 255, 0.48);
+  --warning-100: #fefbcd;
+  --warning-200: #fef69c;
+  --warning-300: #fef06b;
+  --warning-400: #fdea46;
+  --warning-500: #fce00a;
+  --warning-600: #d8bd07;
+  --warning-700: #b59c05;
+  --warning-800: #927c03;
+  --warning-900: #786501;
+  --warning-transparent-100: rgba(252, 224, 10, 0.08);
+  --warning-transparent-200: rgba(252, 224, 10, 0.16);
+  --warning-transparent-300: rgba(252, 224, 10, 0.24);
+  --warning-transparent-400: rgba(252, 224, 10, 0.32);
+  --warning-transparent-500: rgba(252, 224, 10, 0.4);
+  --warning-transparent-600: rgba(252, 224, 10, 0.48);
+  --danger-100: #ffeed6;
+  --danger-200: #ffd9ad;
+  --danger-300: #ffbe83;
+  --danger-400: #ffa465;
+  --danger-500: #ff7a32;
+  --danger-600: #db5924;
+  --danger-700: #b73c19;
+  --danger-800: #93250f;
+  --danger-900: #7a1409;
+  --danger-transparent-100: rgba(255, 122, 50, 0.08);
+  --danger-transparent-200: rgba(255, 122, 50, 0.16);
+  --danger-transparent-300: rgba(255, 122, 50, 0.24);
+  --danger-transparent-400: rgba(255, 122, 50, 0.32);
+  --danger-transparent-500: rgba(255, 122, 50, 0.4);
+  --danger-transparent-600: rgba(255, 122, 50, 0.48);
+  --basic-100: #ffffff;
+  --basic-200: #f7f9fc;
+  --basic-300: #edf1f7;
+  --basic-400: #e4e9f2;
+  --basic-500: #c5cee0;
+  --basic-600: #8f9bb3;
+  --basic-700: #2e3a59;
+  --basic-800: #222b45;
+  --basic-900: #192038;
+  --basic-transparent-100: rgba(197, 206, 224, 0.08);
+  --basic-transparent-200: rgba(197, 206, 224, 0.16);
+  --basic-transparent-300: rgba(197, 206, 224, 0.24);
+  --basic-transparent-400: rgba(197, 206, 224, 0.32);
+  --basic-transparent-500: rgba(197, 206, 224, 0.4);
+  --basic-transparent-600: rgba(197, 206, 224, 0.48); */
+  /*#endregion*/
+
+  /********** FONT FAMILY **********/
+  --f-primary: 'Montserrat', sans-serif;
+  --f-secondary: 'Montserrat', sans-serif;
+
+  /********** FONT SIZE **********/
+  /* --f-size-xs: 1.5rem;
+  --f-size-s: 1.6rem;
+  --f-size-m: 2rem;
+  --f-size-l: 2.3rem; */
+
+  /********** LINE HEIGHT **********/
+  /* --f-line-height: 1.34; */
+
+  /********** HEADING SIZE **********/
+  /* --h1: 18.2rem;
+  --h2: 10.1rem;
+  --h3: 7.9rem;
+  --h4: 4.7rem;
+  --h5: 2rem; */
+
+  /********** HEADING LINE HEIGHT **********/
+  /* --h1-line-height: 0.77;
+  --h2-line-height: 1.06;
+  --h3-line-height: 1.14;
+  --h4-line-height: 1.25;
+  --h5-line-height: 1.32; */
+
+  /********** SPACE **********/
+  /* --space-xs: 0.8rem;
+  --space-s: 1.6rem;
+  --space-m: 2.4rem;
+  --space-l: 3.2rem;
+  --space-xl: 4rem;
+  --space-xxl: 4.8rem; */
+
+  --animate: cubic-bezier(0.77, 0, 0.175, 1);
+}

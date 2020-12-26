@@ -1,9 +1,11 @@
 <script>
-  import { themesStore } from './store'
+  import { themesStore, selectedIndexStore } from './store'
 
   let themes = []
+  let selectedIndex = 0
 
   themesStore.subscribe((store) => (themes = store))
+  selectedIndexStore.subscribe((store) => (selectedIndex = store))
 </script>
 
 <style>
@@ -11,8 +13,8 @@
     background: #1e1e1e;
     color: #b4b8b3;
     padding: 1.6rem;
-    height: 768px;
     overflow: auto;
+    font-size: 2rem;
   }
 
   .code-css__head,
@@ -34,6 +36,7 @@
 
   .code-css__code {
     transform: translateX(1.6rem);
+    margin: 0.5rem 0;
   }
 
   .code-css__code--prop {
@@ -46,13 +49,13 @@
 </style>
 
 <div class="code-css">
-  {#each themes as theme}
+  {#if themes.length > 0 && themes[selectedIndex]}
     <span class="code-css__head">
-      html{theme.name === 'default' ? '' : '.' + theme.name}
+      html{themes[selectedIndex].name === 'default' ? '' : '.' + themes[selectedIndex].name}
       <span class="code-css__head--bracket">{'{'}</span>
     </span>
 
-    {#each theme.colors as color}
+    {#each themes[selectedIndex].colors as color}
       <span class="code-css__code">
         <span class="code-css__code--prop">--{color.name}</span>:
         <span class="code-css__code--value">{color.value}</span>;
@@ -60,5 +63,5 @@
     {/each}
 
     <span>{'}'}</span>
-  {/each}
+  {/if}
 </div>
