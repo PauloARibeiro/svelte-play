@@ -1,8 +1,34 @@
 <script>
+  // COMPONENTS
+  import Icon from '../../components/Icon.svelte'
+
+  // STORES
   import { themesStore, selectedIndexStore } from './store'
 
   let themes = []
   let selectedIndex = 0
+  let code
+
+  const copyToClipBoard = async () => {
+    const code = `html.${themes[selectedIndex].name}{
+${handleCopyColor()}
+}`
+    await navigator.clipboard.writeText(code)
+  }
+
+  const handleCopyColor = () => {
+    const colors = themes[selectedIndex].colors
+      .map((color, index) => {
+        if (index === 0) {
+          return ` --${color.name}:${color.value};`
+        }
+
+        return `\n --${color.name}:${color.value};`
+      })
+      .join(' ')
+
+    return colors
+  }
 
   themesStore.subscribe((store) => (themes = store))
   selectedIndexStore.subscribe((store) => (selectedIndex = store))
@@ -15,11 +41,14 @@
     padding: 1.6rem;
     overflow: auto;
     font-size: 2rem;
+    height: 100%;
   }
 
   .code-css__head,
   .code-css__code {
     display: block;
+    padding-right: 4rem;
+    word-break: break-all;
   }
 
   .code-css__head {
@@ -46,22 +75,43 @@
   .code-css__code--value {
     color: #b36b43;
   }
+
+  .copy-clipboard {
+    background: none;
+    outline: none;
+    border: none;
+    position: absolute;
+    right: 1.6rem;
+    top: 1.6rem;
+  }
 </style>
 
 <div class="code-css">
   {#if themes.length > 0 && themes[selectedIndex]}
-    <span class="code-css__head">
-      html{themes[selectedIndex].name === 'default' ? '' : '.' + themes[selectedIndex].name}
-      <span class="code-css__head--bracket">{'{'}</span>
-    </span>
-
-    {#each themes[selectedIndex].colors as color}
-      <span class="code-css__code">
-        <span class="code-css__code--prop">--{color.name}</span>:
-        <span class="code-css__code--value">{color.value}</span>;
+    <div class="code" bind:this={code}>
+      <span class="code-css__head">
+        html.{themes[selectedIndex].name}
+        <span class="code-css__head--bracket">{'{'}</span>
       </span>
-    {/each}
 
-    <span>{'}'}</span>
+      {#each themes[selectedIndex].colors as color}
+        <span class="code-css__code">
+          <span class="code-css__code--prop">--{color.name}</span>:
+          <span class="code-css__code--value">{color.value}</span>;
+        </span>
+      {/each}
+
+      <span>{'}'}</span>
+    </div>
+
+    <button on:click={copyToClipBoard} class="copy-clipboard pointer">
+      <Icon
+        name="copy"
+        width="2.4rem"
+        height="2.4rem"
+        color="#ffffffBF"
+        hoverColor="#fff"
+        toolTip="Copy code" />
+    </button>
   {/if}
 </div>

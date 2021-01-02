@@ -22,6 +22,7 @@
   let editNameTemp = ''
   let inputEl
   let isDelete = false
+  let description = ''
 
   const iconsColor = {
     base: '#0000008A',
@@ -78,7 +79,6 @@
   const onNewTheme = () => {
     const index = themes.length === 0 ? 0 : themes.length
 
-    console.log(themes.length)
     if (themes.length === 0) {
     }
 
@@ -125,26 +125,16 @@
     }, 100)
   }
 
-  // const itemDeleteSlide = (node, { transition }) => {
-  //   if (!transition) return
+  const handleThemeStore = (store) => {
+    themes = store
 
-  //   return {
-  //     duration: 1000,
-  //     ease: 'ease',
-  //     css: (t) => {
-  //       if (1 - t === 0) {
-  //         node.style.right = `-${(1 - t) * 96}px`
-  //       }
+    if (themes.length > 0) return (description = `Select one of your themes`)
 
-  //       return `
-  //       right: -${(1 - t) * 96}px
-  // 			`
-  //     },
-  //   }
-  // }
+    description = `Start by creating a theme`
+  }
 
   selectedIndexStore.subscribe((store) => (selectedIndex = store))
-  themesStore.subscribe((store) => (themes = store))
+  themesStore.subscribe((store) => handleThemeStore(store))
 </script>
 
 <style>
@@ -212,13 +202,21 @@
     height: 6.6rem;
   }
 
+  .theme:hover {
+    background-color: #f2f2f299;
+  }
+
+  .theme.active:hover {
+    background: #f2f2f2;
+  }
+
   /* .theme:active {
     background: #f2f2f266;
   } */
 
-  .theme:hover::before {
+  /* .theme:hover::before {
     opacity: 1;
-  }
+  } */
 
   /********** label and input **********/
   /* .name {
@@ -228,6 +226,17 @@
   .name,
   .label {
     height: 100%;
+  }
+
+  .label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    padding-top: 3.3rem;
+    padding-right: 11rem;
   }
 
   .label,
@@ -241,6 +250,7 @@
     outline: none;
     border: none;
     background-color: #f2f2f2;
+    padding-right: 12rem;
   }
 
   /********** actions **********/
@@ -289,105 +299,110 @@
 </style>
 
 <div class="themes-wrapper fx fx-direction-column">
-  <Header title="Themes" description="Start by creating a theme" on:onClick={() => onNewTheme()} />
+  <Header title="Themes" {description} on:onClick={() => onNewTheme()} toolTip="Create new theme" />
 
-  <!-- <SimpleBar style="height: calc(100vh - 12%);"> -->
-  <ul class="themes">
-    {#each themes as theme, i (theme)}
-      <li
-        animate:flip={{ delay: 400, duration: 200 }}
-        in:fade={{ duration: 130 }}
-        out:fly={{ x: 150, duration: 600 }}>
-        <div
-          class="theme fx fx-content-space-between fx-center pointer"
-          class:active={selectedIndex === i}
-          class:delete={isDelete && selectedIndex === i}>
-          <div class="name fx w-100">
+  <SimpleBar style="height: calc(100vh - 12%);">
+    <ul class="themes">
+      {#each themes as theme, i (theme)}
+        <li
+          animate:flip={{ delay: 400, duration: 200 }}
+          in:fade={{ duration: 130 }}
+          out:fly={{ x: 150, duration: 600 }}>
+          <div
+            class="theme fx fx-content-space-between fx-center pointer"
+            class:active={selectedIndex === i}
+            class:delete={isDelete && selectedIndex === i}>
+            <div class="name fx w-100">
+              {#if !theme.edit}
+                <label
+                  class="label fx fx-align-center w-100 pointer"
+                  for={`theme-${i}`}
+                  on:click={() => onToggle(i)}>{theme.name}
+                </label>
+              {:else}
+                <input
+                  type="text"
+                  autocomplete="off"
+                  id={`theme-${i}`}
+                  class="input w-100"
+                  value={theme.name}
+                  on:keyup={onEditName}
+                  on:keypress={preventWhiteSpace}
+                  bind:this={inputEl} />
+              {/if}
+            </div>
+
             {#if !theme.edit}
-              <label
-                class="label fx fx-align-center w-100 pointer"
-                for={`theme-${i}`}
-                on:click={() => onToggle(i)}>{theme.name}
-              </label>
+              <div class="actions fx fx-align-center" transition:fade={{ duration: 130 }}>
+                <Icon
+                  name="edit"
+                  width="2.4rem"
+                  height="2.4rem"
+                  color={iconsColor.base}
+                  hoverColor={iconsColor.edit}
+                  toolTip="Edit theme name"
+                  on:click={() => onToggleToEdit(i)} />
+
+                <Icon
+                  name="delete"
+                  width="2.4rem"
+                  height="2.4rem"
+                  color={iconsColor.base}
+                  hoverColor={iconsColor.delete}
+                  toolTip="Delete theme"
+                  on:click={() => onToggleDelete(i, true)} />
+              </div>
             {:else}
-              <input
-                type="text"
-                autocomplete="off"
-                id={`theme-${i}`}
-                class="input w-100"
-                disabled={i === 0}
-                value={theme.name}
-                on:keyup={onEditName}
-                on:keypress={preventWhiteSpace}
-                bind:this={inputEl} />
+              <div class="actions fx fx-align-center" transition:fade={{ duration: 130 }}>
+                <Icon
+                  name="check"
+                  width="2.4rem"
+                  height="2.4rem"
+                  color={iconsColor.base}
+                  hoverColor={iconsColor.confirm}
+                  toolTip="Confirm name edit"
+                  on:click={() => onConfirm(i)} />
+
+                <Icon
+                  name="close"
+                  width="2.4rem"
+                  height="2.4rem"
+                  color={iconsColor.base}
+                  hoverColor={iconsColor.delete}
+                  toolTip="Cancel name edit"
+                  on:click={() => onCancel(i)} />
+              </div>
             {/if}
           </div>
-
-          {#if !theme.edit}
-            <div class="actions fx fx-align-center" transition:fade={{ duration: 130 }}>
-              <Icon
-                name="edit"
-                width="2.4rem"
-                height="2.4rem"
-                color={iconsColor.base}
-                hoverColor={iconsColor.edit}
-                on:click={() => onToggleToEdit(i)} />
-
-              <Icon
-                name="delete"
-                width="2.4rem"
-                height="2.4rem"
-                color={iconsColor.base}
-                hoverColor={iconsColor.delete}
-                on:click={() => onToggleDelete(i, true)} />
-            </div>
-          {:else}
-            <div class="actions fx fx-align-center" transition:fade={{ duration: 130 }}>
+          <!-- {#if isDelete && selectedIndex === i} -->
+          <div
+            class="delete-actions delete-transion  fx pointer"
+            class:delete={isDelete && selectedIndex === i}>
+            <div class="delete-action confirm fx fx-center">
               <Icon
                 name="check"
                 width="2.4rem"
                 height="2.4rem"
-                color={iconsColor.base}
-                hoverColor={iconsColor.confirm}
-                on:click={() => onConfirm(i)} />
+                color="white"
+                hoverColor="white"
+                toolTip="Confirm delete"
+                on:click={() => onConfirmDelete(i)} />
+            </div>
 
+            <div class="delete-action discard fx fx-center">
               <Icon
                 name="close"
                 width="2.4rem"
                 height="2.4rem"
-                color={iconsColor.base}
-                hoverColor={iconsColor.delete}
-                on:click={() => onCancel(i)} />
+                color="white"
+                hoverColor="white"
+                toolTip="Cancel delete"
+                on:click={() => onToggleDelete(i, false)} />
             </div>
-          {/if}
-        </div>
-        <!-- {#if isDelete && selectedIndex === i} -->
-        <div
-          class="delete-actions delete-transion  fx pointer"
-          class:delete={isDelete && selectedIndex === i}>
-          <div class="delete-action confirm fx fx-center">
-            <Icon
-              name="check"
-              width="2.4rem"
-              height="2.4rem"
-              color="white"
-              hoverColor="white"
-              on:click={() => onConfirmDelete(i)} />
           </div>
-
-          <div class="delete-action discard fx fx-center">
-            <Icon
-              name="close"
-              width="2.4rem"
-              height="2.4rem"
-              color="white"
-              hoverColor="white"
-              on:click={() => onToggleDelete(i, false)} />
-          </div>
-        </div>
-        <!-- {/if} -->
-      </li>
-    {/each}
-  </ul>
-  <!-- </SimpleBar> -->
+          <!-- {/if} -->
+        </li>
+      {/each}
+    </ul>
+  </SimpleBar>
 </div>

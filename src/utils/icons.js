@@ -10,6 +10,9 @@ const Icons = {
 
   close:
     '<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="close_24px"><path id="icon/navigation/close_24px" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"  /></g></svg>',
+
+  copy:
+    '<svg width="24" height="24" viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg"><g id="file_copy_24px"><path id="icon/content/file_copy_24px" fill-rule="evenodd" clip-rule="evenodd" d="M16.5 1H4.5C3.39999 1 2.5 1.89999 2.5 3V17H4.5V3H16.5V1ZM15.5 5H8.5C7.4 5 6.51 5.89999 6.51 7L6.5 21C6.5 22.1 7.39 23 8.49 23H19.5C20.6 23 21.5 22.1 21.5 21V11L15.5 5ZM8.5 7V21H19.5V12H14.5V7H8.5Z" /></g></svg>',
 }
 
 export default Icons

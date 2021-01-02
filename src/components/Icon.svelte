@@ -9,6 +9,7 @@
   export let height = '100%'
   export let color = 'grey'
   export let hoverColor = 'red'
+  export let toolTip = ''
   let tempColor = 'grey'
 
   tempColor = color
@@ -25,6 +26,12 @@
 <style>
   .icon {
     transition: 0.13s ease-in-out fill;
+  }
+  button {
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: inherit;
   }
 
   /* .black {
@@ -95,13 +102,14 @@
   } */
 </style>
 
-<div
+<button
   style="width: 100%; height: 100%"
   class="fx fx-center"
+  title={toolTip}
   on:click={(e) => dispatch('click', e)}
   on:mouseover={onMouseover}
   on:mouseout={onMouseleave}>
   <div style={`width: ${width}; height:${height}; fill:${color}`} class={`icon ${color}`}>
     {@html Icons[name]}
   </div>
-</div>
+</button>

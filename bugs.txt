@@ -1,5 +1,21 @@
-Delete all colors of a theme has a weird bug with other themes
-After deleting all themes can't create new one - fixed
-disable create new color button if not themes
-after creating select that one - fixed
-clicking on color text opens all colors
+fixed ---- Delete all colors of a theme has a weird bug with other themes
+
+fixed ---- After deleting all themes can't create new one
+
+fixed ---- disable create new color button if not themes
+
+fixed ---- after creating select that one 
+
+fixed ---- clicking on color text opens all colors
+
+button animations
+
+done ----- copy to clipboard 
+
+done -----  max widths throughout app
+
+done ----- cant edit first item name
+
+done ----- tooltips
+
+done ----- item click not very good

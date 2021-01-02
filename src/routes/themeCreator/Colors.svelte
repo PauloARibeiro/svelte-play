@@ -20,15 +20,29 @@
   let themes = []
   let selectedIndex = 0
   let shouldAnimate = false
-  let showPicker = false
   let isCreateDisabled = false
+  let description = ''
 
   const handleThemeStore = (store) => {
     themes = store
 
-    if (themes.length > 0) return (isCreateDisabled = false)
+    if (themes[selectedIndex] && themes[selectedIndex].colors.length === 0) {
+      description = `Create a new color`
+
+      return
+    }
+
+    if (themes.length > 0) {
+      isCreateDisabled = false
+
+      description = `Edit '${themes[selectedIndex].name}' colors`
+
+      return
+    }
 
     isCreateDisabled = true
+
+    description = `No theme selected`
   }
 
   const onChangeName = (event, index) => {
@@ -41,7 +55,7 @@
     if (!shouldAnimate) shouldAnimateStore.set(true)
 
     setTimeout(() => {
-      themes.forEach((theme) => theme.colors.splice(index, 1))
+      themes[selectedIndex].colors.splice(index, 1)
 
       themesStore.set(themes)
     }, 0)
@@ -132,9 +146,11 @@
 <div class="colors-wrapper">
   <Header
     title="Colors"
-    description="Edit your theme's colors"
+    {description}
     on:onClick={onAddColor}
-    bind:disabled={isCreateDisabled} />
+    bind:disabled={isCreateDisabled}
+    toolTip="Create new color" />
+
   {#if themes.length > 0 && themes[selectedIndex]}
     <SimpleBar style="height: calc(100vh - 13%);">
       <div class="colors">
@@ -148,7 +164,7 @@
               <div class="color-picker pointer">
                 <ColorPicker
                   on:onColorChange={(event) => onColorChange(event, i)}
-                  bind:show={showPicker}
+                  bind:show={color.showPicker}
                   bind:color={color.value} />
               </div>
 
@@ -160,7 +176,7 @@
                   value={color.name}
                   on:keyup={(event) => onChangeName(event, i)}
                   on:keypress={preventWhiteSpace} />
-                <div on:click={() => (showPicker = true)} class="value">{color.value}</div>
+                <div on:click={() => (color.showPicker = true)} class="value">{color.value}</div>
               </div>
             </div>
 
@@ -171,6 +187,7 @@
                 height="20px"
                 color="#0000008A"
                 hoverColor="#EB5757"
+                toolTip="Delete color"
                 on:click={() => onDelete(i)} />
             </div>
           </div>

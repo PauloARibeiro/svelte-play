@@ -35,6 +35,19 @@
 </script>
 
 <style>
+  :global(.color-info-box),
+  :global(.alpha-selector) {
+    display: none;
+  }
+
+  :global(.main-container) {
+    height: 201pxb !important;
+    /* border-radius: 10px !important; */
+  }
+
+  /* :global(.alpha-selector ) {
+  } */
+
   .color-picker {
     position: relative;
   }
@@ -47,7 +60,7 @@
 
   .color-picker__picker {
     position: absolute;
-    top: 20px;
+    top: 4.8rem;
     left: 0;
     opacity: 1;
     transition: 0.13s ease-in-out opacity;
