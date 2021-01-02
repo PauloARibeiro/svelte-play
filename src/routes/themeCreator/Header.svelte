@@ -40,7 +40,6 @@
   }
 
   .add {
-    position: relative;
     min-width: 5.6rem;
     height: 5.6rem;
     background-color: #2d9cdb;
